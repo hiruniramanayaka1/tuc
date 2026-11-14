@@ -16,6 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Cache cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -76,6 +86,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - name: Cache cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
       - name: Build tuc (full)
         if: matrix.release_type == 'full'
         run: cargo build --release --locked
@@ -115,6 +135,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+
+      - name: Cache cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
 
       - name: Install ARM target
         run: rustup update && rustup target add aarch64-apple-darwin
